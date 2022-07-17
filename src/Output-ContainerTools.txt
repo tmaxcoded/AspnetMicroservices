@@ -1,0 +1,93 @@
+﻿========== Pulling Images ==========
+Pulling missing Docker images. To cancel this download, close the command prompt window. To disable image auto-pull, see Tools > Options > Container Tools.
+docker pull mcr.microsoft.com/dotnet/aspnet:5.0
+docker pull completed
+========== Preparing Containers ==========
+Getting Docker containers ready...
+docker-compose  -f "C:\Users\tobia\source\repos\AspnetMicroservices\src\docker-compose.yml" -f "C:\Users\tobia\source\repos\AspnetMicroservices\src\docker-compose.override.yml" -f "C:\Users\tobia\source\repos\AspnetMicroservices\src\obj\Docker\docker-compose.vs.debug.g.yml" -p dockercompose10657829458786135602 --ansi never config
+services:
+  catalog.api:
+    build:
+      context: C:\Users\tobia\source\repos\AspnetMicroservices\src
+      dockerfile: Services/Catalog/Catalog.Api/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: Catalog.Api
+      target: base
+    container_name: catalog.api
+    depends_on:
+      catalogdb:
+        condition: service_started
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      DatabaseSettings:ConnectionString: mongodb://catalogdb:27017
+      NUGET_FALLBACK_PACKAGES: /root/.nuget/fallbackpackages;/root/.nuget/fallbackpackages2
+    image: catalogapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages
+        --additionalProbingPath /root/.nuget/fallbackpackages --additionalProbingPath
+        /root/.nuget/fallbackpackages2  "/app/bin/Debug/net5.0/Catalog.Api.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - published: 8000
+      target: 80
+    tty: true
+    volumes:
+    - C:\Users\tobia\source\repos\AspnetMicroservices\src\Services\Catalog\Catalog.Api:/app:rw
+    - C:\Users\tobia\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\tobia\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\tobia\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages:/root/.nuget/fallbackpackages:ro
+    - C:\Program Files (x86)\Microsoft\Xamarin\NuGet:/root/.nuget/fallbackpackages2:ro
+    - C:\Users\tobia\.nuget\packages:/root/.nuget/packages:ro
+    - C:\Users\tobia\source\repos\AspnetMicroservices\src:/src:rw
+  catalogdb:
+    container_name: catalogdb
+    image: mongo
+    ports:
+    - published: 27017
+      target: 27017
+    restart: always
+    volumes:
+    - mongo_data:/data/db:rw
+version: '3.4'
+volumes:
+  mongo_data: {}
+docker-compose  -f "C:\Users\tobia\source\repos\AspnetMicroservices\src\docker-compose.yml" -f "C:\Users\tobia\source\repos\AspnetMicroservices\src\docker-compose.override.yml" -f "C:\Users\tobia\source\repos\AspnetMicroservices\src\obj\Docker\docker-compose.vs.debug.g.yml" -p dockercompose10657829458786135602 --ansi never build
+catalogdb uses an image, skipping
+Building catalog.api
+#1 [internal] load build definition from Dockerfile
+#1 sha256:05603b460defd88e05116ea35a8c8c5350b7473e02fa8c5ec98afb2cb34eeaa3
+#1 transferring dockerfile: 802B 0.0s done
+#1 DONE 0.0s
+#2 [internal] load .dockerignore
+#2 sha256:e09dd6071206701fcd34fb7265e88d837fda95858272e33a495db1013a291e81
+#2 transferring context: 382B done
+#2 DONE 0.0s
+#3 [internal] load metadata for mcr.microsoft.com/dotnet/aspnet:5.0
+#3 sha256:3b35130338ebb888f84ec0aa58f64d182f10a676a625072200f5903996d93690
+#3 DONE 0.0s
+#4 [base 1/2] FROM mcr.microsoft.com/dotnet/aspnet:5.0
+#4 sha256:31acc33a1535ed7869167d21032ed94a0e9b41bbf02055dc5f04524507860176
+#4 DONE 0.0s
+#5 [base 2/2] WORKDIR /app
+#5 sha256:56abde746b4f39a24525b2b730b2dfb6d9688bcf704d367c86a4753aefff33f6
+#5 CACHED
+#6 exporting to image
+#6 sha256:e8c613e07b0b7ff33893b694f7759a10d42e180f2b4dc349fb57dc6b71dcab00
+#6 exporting layers done
+#6 writing image sha256:7f62a1160c2db33237084af8fdd9c2f51f8c5f3df847075afa870cc133f8bc8b done
+#6 naming to docker.io/library/catalogapi:dev done
+#6 DONE 0.0s
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+docker ps --filter "status=running" --filter "label=com.docker.compose.service" --format {{.ID}};{{.Names}}
+docker-compose  -f "C:\Users\tobia\source\repos\AspnetMicroservices\src\docker-compose.yml" -f "C:\Users\tobia\source\repos\AspnetMicroservices\src\docker-compose.override.yml" -f "C:\Users\tobia\source\repos\AspnetMicroservices\src\obj\Docker\docker-compose.vs.debug.g.yml" -p dockercompose10657829458786135602 --ansi never up -d --no-build --force-recreate --remove-orphans
+Creating network "dockercompose10657829458786135602_default" with the default driver
+Pulling catalogdb (mongo:)...
+latest: Pulling from library/mongo
